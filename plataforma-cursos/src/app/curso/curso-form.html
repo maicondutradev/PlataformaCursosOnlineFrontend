@@ -1,0 +1,34 @@
+<div class="container-form">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ cursoId ? 'Editar' : 'Novo' }} Curso</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="salvar()">
+        <mat-form-field class="full-width">
+          <mat-label>Nome do Curso</mat-label>
+          <input matInput formControlName="nome" />
+          <mat-error *ngIf="form.get('nome')?.hasError('required')">Obrigatório</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput formControlName="descricao"></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Preço (R$)</mat-label>
+          <input matInput type="number" formControlName="preco" />
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+            Salvar
+          </button>
+          <button mat-button type="button" routerLink="/">Cancelar</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
