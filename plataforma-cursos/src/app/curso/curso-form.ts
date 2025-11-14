@@ -24,7 +24,8 @@ export class CursoForm implements OnInit {
   form = this.fb.group({
     nome: ['', [Validators.required, Validators.minLength(3)]],
     descricao: ['', Validators.required],
-    preco: [0, [Validators.required, Validators.min(0.01)]]
+    preco: [0, [Validators.required, Validators.min(0.01)]],
+    imagemUrl: ['']
   });
 
   cursoId?: number;

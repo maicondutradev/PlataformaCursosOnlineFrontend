@@ -1,4 +1,12 @@
-<mat-toolbar color="primary">
-  <span>Plataforma de Cursos</span>
+<mat-toolbar color="primary" class="navbar">
+  <button mat-button class="brand-title" routerLink="/">
+    <mat-icon>school</mat-icon>
+    <span>Plataforma de Cursos</span>
+  </button>
+
+  <span class="spacer"></span>
+
+  <button mat-button routerLink="/">Cursos</button>
 </mat-toolbar>
+
 <router-outlet></router-outlet>

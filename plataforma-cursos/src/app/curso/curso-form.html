@@ -22,6 +22,11 @@
           <input matInput type="number" formControlName="preco" />
         </mat-form-field>
 
+        <mat-form-field class="full-width">
+          <mat-label>URL da Imagem</mat-label>
+          <input matInput formControlName="imagemUrl" placeholder="http://exemplo.com/imagem.png" />
+        </mat-form-field>
+
         <div class="actions">
           <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
             Salvar

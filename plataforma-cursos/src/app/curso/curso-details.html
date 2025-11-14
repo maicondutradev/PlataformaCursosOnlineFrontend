@@ -1,0 +1,73 @@
+<div class="loading-shade" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="details-container" *ngIf="curso">
+  <a mat-stroked-button routerLink="/" class="back-button">
+    <mat-icon>chevron_left</mat-icon>
+    Voltar para a lista
+  </a>
+
+  <h1>{{ curso.nome }}</h1>
+  <p class="descricao">{{ curso.descricao }}</p>
+
+  <div class="main-content">
+    <div class="media-column">
+      <img [src]="curso.imagemUrl" alt="{{ curso.nome }}" class="main-image" />
+    </div>
+
+    <div class="info-column">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Aulas do Curso</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="curso.aulas && curso.aulas.length > 0; else semAulas">
+            <div *ngFor="let aula of curso.aulas" class="aula-item">
+              <img
+                [src]="aula.videoUrl | youtubeThumbnail"
+                class="aula-thumbnail"
+                alt="Miniatura"
+              />
+              <span>{{ aula.nome }}</span>
+              <span class="aula-desc">{{ aula.descricaoCurta }}</span>
+            </div>
+          </div>
+          <ng-template #semAulas>
+            <p class="sem-aulas-msg">Nenhuma aula cadastrada para este curso.</p>
+          </ng-template>
+
+          <hr class="divider" />
+
+          <h4>Adicionar Nova Aula</h4>
+          <form [formGroup]="aulaForm" (ngSubmit)="salvarAula()" class="aula-form">
+            <mat-form-field class="full-width">
+              <mat-label>Nome da Aula</mat-label>
+              <input matInput formControlName="nome" />
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <mat-label>Descrição Curta (Opcional)</mat-label>
+              <input matInput formControlName="descricaoCurta" />
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <mat-label>URL do Vídeo (Youtube, etc.)</mat-label>
+              <input
+                matInput
+                formControlName="videoUrl"
+                placeholder="https://youtube.com/watch?v=..."
+              />
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" type="submit" [disabled]="aulaForm.invalid">
+              Adicionar Aula
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <h2 class="preco-details">{{ curso.preco | currency : 'BRL' }}</h2>
+    </div>
+  </div>
+</div>

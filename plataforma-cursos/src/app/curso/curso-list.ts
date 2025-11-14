@@ -6,11 +6,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CursoService } from '../services/curso';
 import { Curso } from '../models/curso';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-curso-list',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatButtonModule, RouterModule, MatIconModule],
+  imports: [CommonModule, MatTableModule, MatButtonModule, RouterModule, MatIconModule, MatCardModule],
   templateUrl: './curso-list.html',
   styleUrl: './curso-list.css'
 })
@@ -19,7 +20,6 @@ export class CursoList implements OnInit {
   private router = inject(Router);
 
   cursos: Curso[] = [];
-  displayedColumns = ['id', 'nome', 'descricao', 'preco', 'acoes'];
 
   ngOnInit() {
     this.carregar();

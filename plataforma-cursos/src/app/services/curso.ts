@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Curso } from '../models/curso';
+import { Aula } from '../models/aula';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ import { Curso } from '../models/curso';
 export class CursoService {
   private http = inject(HttpClient);
   private readonly API = 'https://localhost:7000/api/Curso';
+  private readonly ApiAula = 'https://localhost:7000/api/Aula';
 
   listar(): Observable<Curso[]> {
     return this.http.get<Curso[]>(this.API);
@@ -28,5 +30,9 @@ export class CursoService {
 
   remover(id: number): Observable<void> {
     return this.http.delete<void>(`${this.API}/${id}`);
+  }
+
+  adicionarAula(aula: Aula): Observable<Aula> {
+    return this.http.post<Aula>(this.ApiAula, aula);
   }
 }
