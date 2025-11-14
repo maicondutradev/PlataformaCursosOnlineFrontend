@@ -14,70 +14,109 @@
   <div class="main-content">
     <div class="media-column">
       <img [src]="curso.imagemUrl" alt="{{ curso.nome }}" class="main-image" />
+      <h2 class="preco-details">{{ curso.preco | currency : 'BRL' }}</h2>
     </div>
 
     <div class="info-column">
       <mat-card>
         <mat-card-header>
-          <mat-card-title>Aulas do Curso</mat-card-title>
+          <mat-card-title>Conteúdo do Curso</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div *ngIf="curso.aulas && curso.aulas.length > 0; else semAulas">
-            <div *ngFor="let aula of curso.aulas" class="aula-item">
-              <img
-                [src]="aula.videoUrl | youtubeThumbnail"
-                class="aula-thumbnail"
-                alt="Miniatura"
-              />
+          <mat-accordion *ngIf="curso.modulos && curso.modulos.length > 0; else semModulos">
+            <mat-expansion-panel *ngFor="let modulo of curso.modulos">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <strong>{{ modulo.nome }}</strong>
+                </mat-panel-title>
+                <mat-panel-description>
+                  {{ modulo.aulas?.length || 0 }} aulas
+                </mat-panel-description>
+              </mat-expansion-panel-header>
 
-              <div class="aula-info">
-                <span>{{ aula.nome }}</span>
-                <span class="aula-desc">{{ aula.descricaoCurta }}</span>
+              <div *ngIf="modulo.aulas && modulo.aulas.length > 0; else semAulas">
+                <div *ngFor="let aula of modulo.aulas" class="aula-item">
+                  <img
+                    [src]="aula.videoUrl | youtubeThumbnail"
+                    class="aula-thumbnail"
+                    alt="Miniatura"
+                  />
+                  <div class="aula-info">
+                    <span>{{ aula.nome }}</span>
+                    <span class="aula-desc">{{ aula.descricaoCurta }}</span>
+                  </div>
+                  <div class="aula-actions">
+                    <button mat-icon-button color="primary" (click)="editarAula(aula)">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="removerAula(aula.id!)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
               </div>
-
-              <div class="aula-actions">
-                <button mat-icon-button color="primary" (click)="editarAula(aula)">
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-icon-button color="warn" (click)="removerAula(aula.id!)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </div>
-            </div>
-          </div>
-          <ng-template #semAulas>
-            <p class="sem-aulas-msg">Nenhuma aula cadastrada para este curso.</p>
+              <ng-template #semAulas>
+                <p class="sem-aulas-msg">Nenhuma aula cadastrada neste módulo.</p>
+              </ng-template>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <ng-template #semModulos>
+            <p class="sem-aulas-msg">Nenhum módulo cadastrado para este curso.</p>
           </ng-template>
+        </mat-card-content>
+      </mat-card>
 
-          <hr class="divider" />
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-card-title>Adicionar Novo Módulo</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="moduloForm" (ngSubmit)="salvarModulo()" class="aula-form">
+            <mat-form-field class="full-width">
+              <mat-label>Nome do Módulo</mat-label>
+              <input matInput formControlName="nome" />
+            </mat-form-field>
+            <button mat-raised-button color="accent" type="submit" [disabled]="moduloForm.invalid">
+              Adicionar Módulo
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
 
-          <h4>{{ aulaEmEdicao ? 'Editando Aula' : 'Adicionar Nova Aula' }}</h4>
-
+      <mat-card class="form-card aula-form-card">
+        <mat-card-header>
+          <mat-card-title>{{
+            aulaEmEdicao ? 'Editando Aula' : 'Adicionar Nova Aula'
+          }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
           <form [formGroup]="aulaForm" (ngSubmit)="salvarAula()" class="aula-form">
+            <mat-form-field class="full-width">
+              <mat-label>Módulo</mat-label>
+              <mat-select formControlName="moduloId">
+                <mat-option *ngFor="let modulo of curso.modulos" [value]="modulo.id">
+                  {{ modulo.nome }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
             <mat-form-field class="full-width">
               <mat-label>Nome da Aula</mat-label>
               <input matInput formControlName="nome" />
             </mat-form-field>
-
             <mat-form-field class="full-width">
-              <mat-label>Descrição Curta</mat-label>
+              <mat-label>Descrição Curta (Opcional)</mat-label>
               <input matInput formControlName="descricaoCurta" />
             </mat-form-field>
-
             <mat-form-field class="full-width">
-              <mat-label>URL do Vídeo (Youtube)</mat-label>
-              <input
-                matInput
-                formControlName="videoUrl"
-                placeholder="https://youtube.com/watch?v=..."
-              />
+              <mat-label>URL do Vídeo</mat-label>
+              <input matInput formControlName="videoUrl" />
             </mat-form-field>
 
             <div class="form-actions">
               <button mat-raised-button color="primary" type="submit" [disabled]="aulaForm.invalid">
                 {{ aulaEmEdicao ? 'Salvar Alterações' : 'Adicionar Aula' }}
               </button>
-
               <button mat-button type="button" *ngIf="aulaEmEdicao" (click)="cancelarEdicao()">
                 Cancelar
               </button>
@@ -85,8 +124,6 @@
           </form>
         </mat-card-content>
       </mat-card>
-
-      <h2 class="preco-details">{{ curso.preco | currency : 'BRL' }}</h2>
     </div>
   </div>
 </div>

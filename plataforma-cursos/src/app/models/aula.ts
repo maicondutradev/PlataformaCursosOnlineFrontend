@@ -3,5 +3,5 @@ export interface Aula {
   nome: string;
   descricaoCurta: string;
   videoUrl: string;
-  cursoId: number;
+  moduloId: number;
 }
