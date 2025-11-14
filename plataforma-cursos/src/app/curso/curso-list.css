@@ -9,8 +9,35 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap; /* Permite quebrar em telas pequenas */
+  gap: 20px; /* Adiciona espaço caso quebre a linha */
 }
 
+/* NOVO: Container para as ações da direita */
+.actions-container {
+  display: flex;
+  align-items: center; /* Alinha a barra de pesquisa e o botão */
+  gap: 16px; /* Espaço entre a pesquisa e o botão */
+  flex-wrap: wrap; /* Permite quebrar em telas pequenas */
+}
+
+/* REMOVA ESTE SELETOR ANTIGO */
+/*
+.search-container {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+}
+*/
+
+/* AJUSTE O CAMPO DE PESQUISA */
+.search-field {
+  /* Não precisa mais de max-width,
+     pode ter uma largura fixa ou baseada no flex-item */
+  width: 300px;
+}
+
+/* O resto do seu CSS (.cursos-container, .curso-card, etc.) continua igual */
 .cursos-container {
   display: flex;
   flex-wrap: wrap;
@@ -46,4 +73,17 @@
   font-size: 1.2rem;
   font-weight: bold;
   color: #333;
+}
+
+.no-results {
+  width: 100%;
+  text-align: center;
+  padding: 40px;
+  color: #777;
+}
+
+.no-results mat-icon {
+  font-size: 50px;
+  width: 50px;
+  height: 50px;
 }

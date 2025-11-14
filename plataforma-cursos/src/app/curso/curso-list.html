@@ -1,32 +1,42 @@
 <div class="container">
   <div class="header-container">
     <h2>Catálogo de Cursos</h2>
-    <button mat-raised-button color="primary" routerLink="/novo">Novo Curso</button>
+
+    <div class="actions-container">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Pesquisar curso...</mat-label>
+        <input matInput [formControl]="searchControl" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <button mat-raised-button color="primary" routerLink="/novo">Novo Curso</button>
+    </div>
   </div>
 
-  <div class="cursos-container">
-    <mat-card class="curso-card" *ngFor="let curso of cursos">
+  <div class="cursos-container" *ngIf="cursosFiltrados | async as listaCursos">
+    <mat-card class="curso-card" *ngFor="let curso of listaCursos">
       <img
         mat-card-image
         [src]="curso.imagemUrl"
         alt="{{ curso.nome }}"
         class="curso-imagem-principal"
       />
-
       <mat-card-header>
         <mat-card-title>{{ curso.nome }}</mat-card-title>
       </mat-card-header>
-
       <mat-card-content>
         <p class="curso-descricao">{{ curso.descricao }}</p>
         <p class="curso-preco">{{ curso.preco | currency : 'BRL' }}</p>
       </mat-card-content>
-
       <mat-card-actions>
         <button mat-button color="accent" [routerLink]="['/curso', curso.id!]">DETALHES</button>
-        <button mat-button color="primary" (click)="editar(curso.id!)">EDITAR</button>
+        <button mat-button color="primary" [routerLink]="['/editar', curso.id!]">EDITAR</button>
         <button mat-button color="warn" (click)="remover(curso.id!)">EXCLUIR</button>
       </mat-card-actions>
     </mat-card>
+
+    <div *ngIf="listaCursos.length === 0" class="no-results">
+      <mat-icon>sentiment_dissatisfied</mat-icon>
+      <h3>Nenhum curso encontrado com esse nome.</h3>
+    </div>
   </div>
 </div>
