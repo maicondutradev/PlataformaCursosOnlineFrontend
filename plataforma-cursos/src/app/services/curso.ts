@@ -35,4 +35,12 @@ export class CursoService {
   adicionarAula(aula: Aula): Observable<Aula> {
     return this.http.post<Aula>(this.ApiAula, aula);
   }
+
+  atualizarAula(id: number, aula: Aula): Observable<Aula> {
+  return this.http.put<Aula>(`${this.ApiAula}/${id}`, aula);
+  }
+
+  removerAula(id: number): Observable<void> {
+  return this.http.delete<void>(`${this.ApiAula}/${id}`);
+  }
 }

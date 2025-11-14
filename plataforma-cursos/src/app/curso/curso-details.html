@@ -29,8 +29,20 @@
                 class="aula-thumbnail"
                 alt="Miniatura"
               />
-              <span>{{ aula.nome }}</span>
-              <span class="aula-desc">{{ aula.descricaoCurta }}</span>
+
+              <div class="aula-info">
+                <span>{{ aula.nome }}</span>
+                <span class="aula-desc">{{ aula.descricaoCurta }}</span>
+              </div>
+
+              <div class="aula-actions">
+                <button mat-icon-button color="primary" (click)="editarAula(aula)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="removerAula(aula.id!)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
             </div>
           </div>
           <ng-template #semAulas>
@@ -39,7 +51,8 @@
 
           <hr class="divider" />
 
-          <h4>Adicionar Nova Aula</h4>
+          <h4>{{ aulaEmEdicao ? 'Editando Aula' : 'Adicionar Nova Aula' }}</h4>
+
           <form [formGroup]="aulaForm" (ngSubmit)="salvarAula()" class="aula-form">
             <mat-form-field class="full-width">
               <mat-label>Nome da Aula</mat-label>
@@ -47,12 +60,12 @@
             </mat-form-field>
 
             <mat-form-field class="full-width">
-              <mat-label>Descrição Curta (Opcional)</mat-label>
+              <mat-label>Descrição Curta</mat-label>
               <input matInput formControlName="descricaoCurta" />
             </mat-form-field>
 
             <mat-form-field class="full-width">
-              <mat-label>URL do Vídeo (Youtube, etc.)</mat-label>
+              <mat-label>URL do Vídeo (Youtube)</mat-label>
               <input
                 matInput
                 formControlName="videoUrl"
@@ -60,9 +73,15 @@
               />
             </mat-form-field>
 
-            <button mat-raised-button color="primary" type="submit" [disabled]="aulaForm.invalid">
-              Adicionar Aula
-            </button>
+            <div class="form-actions">
+              <button mat-raised-button color="primary" type="submit" [disabled]="aulaForm.invalid">
+                {{ aulaEmEdicao ? 'Salvar Alterações' : 'Adicionar Aula' }}
+              </button>
+
+              <button mat-button type="button" *ngIf="aulaEmEdicao" (click)="cancelarEdicao()">
+                Cancelar
+              </button>
+            </div>
           </form>
         </mat-card-content>
       </mat-card>
